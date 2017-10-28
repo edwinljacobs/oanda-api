@@ -1,0 +1,19 @@
+{
+    "name": "edwinljacobs/oanda-api",
+    "description": "oanda-api-rest-v2",
+    "type": "package",
+    "authors": [
+        {
+            "name": "Edwin Jacobs",
+            "email": "edwinljacobs@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-0" : {
+            "EdwinLJacobs\\OandaApi" : "src"
+        }
+    }
+}
