@@ -112,7 +112,7 @@ class Account
             throw new \RuntimeException('No account info found when reading response stream');
         }
 
-        return new AccountModel(json_decode($accountInfo));
+        return new AccountModel(json_decode($accountInfo, true));
     }
 
     /**
