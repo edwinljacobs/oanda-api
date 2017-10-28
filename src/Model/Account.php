@@ -689,7 +689,7 @@ class Account
     {
         // Initialize object with account info data
         foreach ($accountInfo as $property => $value) {
-            $setter = 'set' . $property;
+            $setter = 'set' . ucfirst($property);
             if (ctype_digit($value)) {
                 $value = (int) $value;
             } else if (is_numeric($value)) {
