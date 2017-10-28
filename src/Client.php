@@ -74,7 +74,7 @@ class Client
     /**
      * @return array
      */
-    public function getForexPairs()
+    public function getAccount()
     {
         $callParams = [
             'uri',
@@ -92,27 +92,21 @@ class Client
     protected function call(array $parameters)
     {
         $client = $this->getClient($parameters);
+        $this->configureClient($client, $parameters);
     }
 
     /**
-     * @param $parameters
      * @return GuzzleClient
      */
-    protected function getClient(array $parameters)
+    protected function getClient()
     {
         if (!$this->httpClient) {
-            $this->httpClient = new GuzzleClient([]);
+            $this->httpClient = new GuzzleClient();
         }
-
-        if (!empty($parameters)) {
-            $this->configureClient($parameters);
-        }
-
-        return $this->httpClient;
     }
 
     protected function configureClient(array $parameters)
     {
-
+        $client = $this->getClient($parameters);
     }
 }

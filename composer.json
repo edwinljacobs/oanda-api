@@ -2,6 +2,7 @@
     "name": "edwinljacobs/oanda-api",
     "description": "oanda-api-rest-v2",
     "type": "package",
+    "license": "MIT",
     "authors": [
         {
             "name": "Edwin Jacobs",
@@ -9,11 +10,14 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "roave/security-advisories": "dev-master"
     },
     "autoload": {
         "psr-0" : {
             "EdwinLJacobs\\OandaApi" : "src"
         }
+    },
+    "require-dev": {
     }
 }
