@@ -111,8 +111,11 @@ class Account
         if (empty($accountInfo)) {
             throw new \RuntimeException('No account info found when reading response stream');
         }
-
-        return new AccountModel(json_decode($accountInfo, true));
+        $accountInfo = json_decode($accountInfo, true)['account'];
+        if ($accountInfo === null) {
+            throw new \RuntimeException('Account information could not be converted from json');
+        }
+        return new AccountModel($accountInfo);
     }
 
     /**
