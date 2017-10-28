@@ -6,7 +6,7 @@
 
 namespace OandaApi;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as GuzzleClient;
 
 /**
  * Class Client
@@ -96,12 +96,12 @@ class Client
 
     /**
      * @param $parameters
-     * @return Client
+     * @return GuzzleClient
      */
     protected function getClient(array $parameters)
     {
         if (!$this->httpClient) {
-            $this->httpClient = new Client([]);
+            $this->httpClient = new GuzzleClient([]);
         }
 
         if (!empty($parameters)) {
