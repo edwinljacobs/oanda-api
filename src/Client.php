@@ -92,6 +92,7 @@ class Client
     protected function request(string $method, string $endpoint, array $options = [])
     {
         try {
+            $options = array_merge_recursive($options, $this->getGuzzleClientDefaultConfig());
             return $this->getClient()->request($method, $endpoint, $options);
         } catch (ClientException $e) {
             // Not yet implemented
@@ -104,7 +105,7 @@ class Client
     protected function getClient(): GuzzleClient
     {
         if (!$this->httpClient) {
-            $this->httpClient = new GuzzleClient($this->getGuzzleClientDefaultConfig());
+            $this->httpClient = new GuzzleClient();
         }
 
         return $this->httpClient;
