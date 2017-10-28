@@ -1,0 +1,8 @@
+# no idea files
+/.idea
+
+# no vendor folder
+/vendor/
+
+# skip composer.lock
+composer.lock
