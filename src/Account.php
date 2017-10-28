@@ -79,7 +79,7 @@ class Account
      */
     protected function getClient(): OandaClient
     {
-        if ($this->client) {
+        if (!$this->client) {
             $this->client = new OandaClient($this->token, $this->baseUri);
         }
 
