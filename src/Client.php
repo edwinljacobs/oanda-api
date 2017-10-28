@@ -7,106 +7,120 @@
 namespace EdwinLJacobs\OandaApi;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\ClientException;
+use Psr\Http\Message\ResponseInterface;
+
 
 /**
  * Class Client
  * @package OandaApi
  */
-class Client
+public class Client
 {
     /**
      * @var string
      */
-    protected $apiKey;
+    protected $token;
 
     /**
      * @var string
      */
-    protected $accountId;
+    protected $baseUri;
 
     /**
-     * @var string
-     */
-    protected $baseUrl;
-
-    /**
-     * @return string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountId(): string
-    {
-        return $this->accountId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBaseUrl(): string
-    {
-        return $this->baseUrl;
-    }
-
-    /**
-     * OandaApi constructor.
-     * @param string $apiKey
-     * @param string $accountId
-     * @param string $baseUrl
-     */
-    public function __construct(string $apiKey, string $accountId, string $baseUrl)
-    {
-        $this->apiKey = $apiKey;
-        $this->accountId = $accountId;
-        $this->baseUrl = $baseUrl;
-    }
-
-    /**
-     * @var
+     * @var GuzzleClient
      */
     protected $httpClient;
 
     /**
-     * @return array
+     * OandaApi constructor.
+     * @param string $token
+     * @param string $baseUri
      */
-    public function getAccount()
+    public function __construct(string $token, string $baseUri)
     {
-        $callParams = [
-            'uri',
-            'endpoint',
-        ];
-
-        $forexData = $this->call($callParams);
+        $this->token = $token;
+        $this->baseUri = $baseUri;
     }
 
     /**
-     * @todo Implement
-     * @param array $parameters
-     * @return array
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed|ResponseInterface
      */
-    protected function call(array $parameters)
+    public function get(string $endpoint, array $options = [])
     {
-        $client = $this->getClient($parameters);
-        $this->configureClient($client, $parameters);
+        return $this->request('GET', $endpoint, $options);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed|ResponseInterface
+     */
+    public function put(string $endpoint, array $options = [])
+    {
+        return $this->request('PUT', $endpoint, $options);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed|ResponseInterface
+     */
+    public function post(string $endpoint, array $options = [])
+    {
+        return $this->request('POST', $endpoint, $options);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $options
+     * @return ResponseInterface
+     */
+    public function patch(string $endpoint, array $options = []) : ResponseInterface
+    {
+        return $this->request('PATCH', $endpoint, $options);
+    }
+
+    /**
+     * @param string $method
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed|ResponseInterface
+     */
+    protected function request(string $method, string $endpoint, array $options = [])
+    {
+        try {
+            return $this->getClient()->request($method, $endpoint, $options);
+        } catch (ClientException $e) {
+            // Not yet implemented
+        }
     }
 
     /**
      * @return GuzzleClient
      */
-    protected function getClient()
+    protected function getClient(): GuzzleClient
     {
         if (!$this->httpClient) {
-            $this->httpClient = new GuzzleClient();
+            $this->httpClient = new GuzzleClient($this->getGuzzleClientDefaultConfig());
         }
+
+        return $this->httpClient;
     }
 
-    protected function configureClient(array $parameters)
+    /**
+     * @return array
+     */
+    protected function getGuzzleClientDefaultConfig() : array
     {
-        $client = $this->getClient($parameters);
+        return [
+            'base_uri' => $this->baseUri,
+            'headers' => [
+                'Authorization' => $this->token,
+                'Accept-Datetime-Format' => 'Y-m-d H:i:s'
+            ]
+        ];
     }
 }
