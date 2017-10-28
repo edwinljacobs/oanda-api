@@ -7,6 +7,7 @@
 namespace EdwinLJacobs\OandaApi;
 
 use EdwinLJacobs\OandaApi\Client as OandaClient;
+use EdwinLJacobs\OandaApi\Model\Account as AccountModel;
 
 /**
  * Class Account
@@ -99,11 +100,19 @@ class Account
 
     /**
      * @param string $accountId
+     * @return AccountModel
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function getAccount(string $accountId = null)
+    public function getAccount(string $accountId = null): AccountModel
     {
         $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId));
+        $accountInfo = $response->getBody()->getContents();
+        if (empty($accountInfo)) {
+            throw new \RuntimeException('No account info found when reading response stream');
+        }
+
+        return new AccountModel(json_decode($accountInfo));
     }
 
     /**

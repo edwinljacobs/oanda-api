@@ -120,7 +120,6 @@ class Client
             'base_uri' => $this->baseUri,
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token,
-                'Accept-Datetime-Format' => 'Y-m-d H:i:s',
                 'Content-Type' => 'application/json'
             ]
         ];
