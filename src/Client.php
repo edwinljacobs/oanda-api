@@ -121,7 +121,7 @@ class Client
             'headers' => [
                 'Authorization' => 'Bearer ' . $this->token,
                 'Accept-Datetime-Format' => 'Y-m-d H:i:s',
-                'Content-Type: application/json'
+                'Content-Type' => 'application/json'
             ]
         ];
     }
