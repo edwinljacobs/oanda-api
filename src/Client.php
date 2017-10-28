@@ -4,7 +4,7 @@
  * Date: 10/28/17
  */
 
-namespace OandaApi;
+namespace EdwinLJacobs\OandaApi;
 
 use GuzzleHttp\Client as GuzzleClient;
 
