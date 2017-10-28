@@ -119,8 +119,9 @@ class Client
         return [
             'base_uri' => $this->baseUri,
             'headers' => [
-                'Authorization' => $this->token,
-                'Accept-Datetime-Format' => 'Y-m-d H:i:s'
+                'Authorization' => 'Bearer ' . $this->token,
+                'Accept-Datetime-Format' => 'Y-m-d H:i:s',
+                'Content-Type: application/json'
             ]
         ];
     }
