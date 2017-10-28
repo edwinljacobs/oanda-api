@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class Client
  * @package OandaApi
  */
-public class Client
+class Client
 {
     /**
      * @var string
