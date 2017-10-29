@@ -38,7 +38,7 @@ abstract class AbstractResponse
     /**
      * Magic getters and setters, the reason we chose this is because API may or may not interface extra properties in the future.
      * If so the response models would break if rigorously defined using "hard" properties. All data available in responses are doc blocked
-     * in the corresponding classes so that we still have code completion and a good feel for the data available.
+     * as getters and setters in the corresponding classes so that we still have code completion.
      *
      * @param string $function
      * @param array $args
