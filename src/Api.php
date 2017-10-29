@@ -9,7 +9,7 @@ namespace EdwinLJacobs\OandaApi;
 use EdwinLJacobs\OandaApi\Response\Account;
 use EdwinLJacobs\OandaApi\Response\Account\Change;
 use EdwinLJacobs\OandaApi\Response\Account\Summary;
-use EdwinLJacobs\OandaApi\Response\Account\Instrument;
+use EdwinLJacobs\OandaApi\Response\Account\InstrumentList;
 
 /**
  * Class Account
@@ -147,17 +147,17 @@ class Api
     /**
      * @param array $instruments
      * @param string|null $accountId
-     * @return Instrument
+     * @return InstrumentList
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function getAccountInstruments(array $instruments = [], string $accountId = null): Instrument
+    public function getAccountInstruments(array $instruments = [], string $accountId = null): InstrumentList
     {
         if (!empty($instruments)) {
             $options['query']['instrumentName'] = implode(',', $instruments);
         }
         $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/instruments');
-        return new Instrument($response['instruments']);
+        return new InstrumentList($response['instruments']);
     }
 
     /**
