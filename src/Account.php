@@ -7,7 +7,7 @@
 namespace EdwinLJacobs\OandaApi;
 
 use EdwinLJacobs\OandaApi\Client as OandaClient;
-use EdwinLJacobs\OandaApi\Model\Account as AccountModel;
+use EdwinLJacobs\OandaApi\Response\Account as AccountModel;
 
 /**
  * Class Account
@@ -16,6 +16,7 @@ use EdwinLJacobs\OandaApi\Model\Account as AccountModel;
 class Account
 {
     const ENDPOINT_ACCOUNTS = '/v3/accounts/';
+    const ENDPOINT_INSTRUMENTS = '/v3/instruments/';
 
     /**
      * @var string Api token
@@ -76,6 +77,16 @@ class Account
     }
 
     /**
+     * @param string|null $accountId
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    protected function getAccountIdEndpoint(string $accountId = null): string
+    {
+        return self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId);
+    }
+
+    /**
      * @return Client
      */
     protected function getClient(): OandaClient
@@ -88,7 +99,7 @@ class Account
     }
 
 
-    /** ---------------------------------------- API METHODS ---------------------------------------- */
+    /** ---------------------------------------- API METHODS ACCOUNT ---------------------------------------- */
 
     /**
      * @return
@@ -106,7 +117,7 @@ class Account
      */
     public function getAccount(string $accountId = null): AccountModel
     {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId));
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId));
         $accountInfo = $response->getBody()->getContents();
         if (empty($accountInfo)) {
             throw new \RuntimeException('No account info found when reading response stream');
@@ -124,7 +135,7 @@ class Account
      */
     public function getAccountSummary(string $accountId = null)
     {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId) . '/summary');
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/summary');
     }
 
     /**
@@ -133,7 +144,7 @@ class Account
      */
     public function getAccountInstruments(string $accountId = null)
     {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId) . '/instruments');
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/instruments');
     }
 
     /**
@@ -142,15 +153,16 @@ class Account
      */
     public function getAccountChanges(string $accountId = null)
     {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $this->getAccountId($accountId) . '/changes');
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/changes');
     }
 
     /**
      * @param string $accountId
      * @param array $options
+     * @throws \InvalidArgumentException
      */
     public function patchAccountConfiguration(string $accountId = null, array $options)
     {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS . $accountId . '/configuration', json_encode($options));
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/configuration', json_encode($options));
     }
 }

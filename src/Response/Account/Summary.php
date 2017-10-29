@@ -4,7 +4,7 @@
  * Date: 10/28/17
  */
 
-namespace EdwinLJacobs\OandaApi\Model\Account;
+namespace EdwinLJacobs\OandaApi\Response\Account;
 
 
 class Summary
