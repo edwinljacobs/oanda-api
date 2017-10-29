@@ -57,15 +57,14 @@ abstract class AbstractResponse
     {
         $type = substr($function, 0, 3);
         $key = lcfirst(substr($function, 3));
-        switch ($type) {
-            case 'set':
-                $this->data[$key] = reset($args);
-                break;
-            case 'get':
-                if (!isset($this->data[$key])) {
-                    throw new \RuntimeException(sprintf('data %s is not defined', $key));
-                }
-                return $this->data[$key];
+        if ($type === 'set') {
+            return $this->data[$key] = reset($args);
+        }
+        if ($type === 'get') {
+            if (!isset($this->data[$key])) {
+                throw new \RuntimeException(sprintf('data %s is not defined', $key));
+            }
+            return $this->data[$key];
         }
         throw new \RuntimeException(sprintf('function %s is not defined', $function));
     }
