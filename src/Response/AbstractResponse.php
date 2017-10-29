@@ -14,6 +14,11 @@ abstract class AbstractResponse
     protected $data;
 
     /**
+     * @var array
+     */
+    protected $ownData = [];
+
+    /**
      * AbstractResponse constructor.
      * @param array $responseData
      */
@@ -33,10 +38,15 @@ abstract class AbstractResponse
     }
 
     /**
+     * Magic getters and setters, the reason we chose this is because API may or may not interface extra properties in the future.
+     * If so the response models would break if rigorously defined using "hard" properties. All data available in responses are doc blocked
+     * in the corresponding classes so that we still have code completion and a good feel for the data available.
+     *
+     *
      * @param string $function
      * @param array $args
      * @return mixed
-     * @throws \RuntimeException
+     * @throws \Exception
      */
     public function __call(string $function, array $args)
     {
@@ -47,9 +57,34 @@ abstract class AbstractResponse
                 $this->data[$key] = reset($args);
                 break;
             case 'get':
+                if (!isset($this->data[$key])) {
+                    throw new \Exception(sprintf('data %s is not defined', $key));
+                }
                 return $this->data[$key];
             default:
-                throw new \RuntimeException(sprintf('function %s is not defined', $function));
+                throw new \Exception(sprintf('function %s is not defined', $function));
         }
+    }
+
+    /**
+     * If so desired one can keep track of own data.
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setData($key, $value): void
+    {
+        $this->ownData[$key] = $value;
+    }
+
+    /**
+     * If return own data by key.
+     *
+     * @param $key
+     * @return mixed|null
+     */
+    public function getData($key)
+    {
+        return $this->ownData[$key] ?? null;
     }
 }
