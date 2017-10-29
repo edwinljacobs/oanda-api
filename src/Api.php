@@ -6,7 +6,6 @@
 
 namespace EdwinLJacobs\OandaApi;
 
-use EdwinLJacobs\OandaApi\Client as OandaClient;
 use EdwinLJacobs\OandaApi\Response\Account;
 use EdwinLJacobs\OandaApi\Response\Account\Change;
 use EdwinLJacobs\OandaApi\Response\Account\Summary;
@@ -37,7 +36,7 @@ class Api
     protected $accountId;
 
     /**
-     * @var OandaClient;
+     * @var Client;
      */
     protected $client;
 
@@ -109,10 +108,10 @@ class Api
     /**
      * @return Client
      */
-    protected function getClient(): OandaClient
+    protected function getClient(): Client
     {
         if (!$this->client) {
-            $this->client = new OandaClient($this->token, $this->baseUri);
+            $this->client = new Client($this->token, $this->baseUri);
         }
 
         return $this->client;

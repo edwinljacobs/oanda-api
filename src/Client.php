@@ -7,7 +7,6 @@
 namespace EdwinLJacobs\OandaApi;
 
 use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 
 
@@ -137,12 +136,8 @@ class Client
      */
     protected function request(string $method, string $endpoint, array $options = []): array
     {
-        try {
-            $response = $this->getClient()->request($method, $endpoint, $options);
-            return $this->validateResponse($response);
-        } catch (ClientException $e) {
-            // Not yet implemented
-        }
+        $response = $this->getClient()->request($method, $endpoint, $options);
+        return $this->validateResponse($response);
     }
 
     /**
