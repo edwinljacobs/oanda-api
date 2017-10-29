@@ -7,13 +7,16 @@
 namespace EdwinLJacobs\OandaApi;
 
 use EdwinLJacobs\OandaApi\Client as OandaClient;
-use EdwinLJacobs\OandaApi\Response\Account as AccountModel;
+use EdwinLJacobs\OandaApi\Response\Account;
+use EdwinLJacobs\OandaApi\Response\Account\Change;
+use EdwinLJacobs\OandaApi\Response\Account\Summary;
+use EdwinLJacobs\OandaApi\Response\Account\Instrument;
 
 /**
  * Class Account
  * @package EdwinLJacobs\OandaApi
  */
-class Account
+class Api
 {
     const ENDPOINT_ACCOUNTS = '/v3/accounts/';
     const ENDPOINT_INSTRUMENTS = '/v3/instruments/';
@@ -77,6 +80,23 @@ class Account
     }
 
     /**
+     * @return string
+     */
+    public function getDateTimeFormat(): string
+    {
+        return $this->getClient()->getDateTimeFormat();
+    }
+
+    /**
+     * @param string $dateTimeFormat
+     * @throws \InvalidArgumentException
+     */
+    public function setDateTimeFormat(string $dateTimeFormat): void
+    {
+        $this->getClient()->setDateTimeFormat($dateTimeFormat);
+    }
+
+    /**
      * @param string|null $accountId
      * @return string
      * @throws \InvalidArgumentException
@@ -102,67 +122,67 @@ class Account
     /** ---------------------------------------- API METHODS ACCOUNT ---------------------------------------- */
 
     /**
-     * @return
-     */
-    public function getAccounts()
-    {
-        $response = $this->getClient()->get(self::ENDPOINT_ACCOUNTS);
-    }
-
-    /**
      * @param string $accountId
-     * @return AccountModel
+     * @return Account
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function getAccount(string $accountId = null): AccountModel
+    public function getAccount(string $accountId = null): Account
     {
-        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId));
-        $accountInfo = $response->getBody()->getContents();
-        if (empty($accountInfo)) {
-            throw new \RuntimeException('No account info found when reading response stream');
-        }
-        $accountInfo = json_decode($accountInfo, true)['account'];
-        if ($accountInfo === null) {
-            throw new \RuntimeException('Account information could not be converted from json');
-        }
-        return new AccountModel($accountInfo);
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId), [], false);
+        return new Account($response['account']);
     }
 
     /**
      * @param string $accountId
+     * @return Summary
+     * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function getAccountSummary(string $accountId = null)
+    public function getAccountSummary(string $accountId = null): Summary
     {
         $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/summary');
+        return new Summary($response['account']);
     }
 
     /**
-     * @param string $accountId
+     * @param array $instruments
+     * @param string|null $accountId
+     * @return Instrument
+     * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function getAccountInstruments(string $accountId = null)
+    public function getAccountInstruments(array $instruments = [], string $accountId = null): Instrument
     {
+        if (!empty($instruments)) {
+            $options['query']['instrumentName'] = implode(',', $instruments);
+        }
         $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/instruments');
+        return new Instrument($response['instruments']);
     }
 
     /**
+     * @param int $sinceTransactionId
      * @param string $accountId
+     * @return Change
+     * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function getAccountChanges(string $accountId = null)
+    public function getAccountChanges($sinceTransactionId, string $accountId = null): Change
     {
-        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/changes');
+        $options['query']['sinceTransactionID'] = $sinceTransactionId;
+        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/changes', $options);
+        return new Change($response['changes']);
     }
 
     /**
      * @param string $accountId
      * @param array $options
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function patchAccountConfiguration(string $accountId = null, array $options)
     {
-        $response = $this->getClient()->get($this->getAccountIdEndpoint($accountId) . '/configuration', json_encode($options));
+        $response = $this->getClient()->patch($this->getAccountIdEndpoint($accountId) . '/configuration', json_encode($options));
     }
 }

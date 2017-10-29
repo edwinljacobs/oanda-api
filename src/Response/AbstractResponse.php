@@ -42,7 +42,6 @@ abstract class AbstractResponse
      * If so the response models would break if rigorously defined using "hard" properties. All data available in responses are doc blocked
      * in the corresponding classes so that we still have code completion and a good feel for the data available.
      *
-     *
      * @param string $function
      * @param array $args
      * @return mixed
