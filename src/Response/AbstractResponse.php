@@ -24,8 +24,6 @@ abstract class AbstractResponse
      */
     public function __construct($responseData)
     {
-        $this->responseData = $responseData;
-        // Initialize object with response data
         foreach ($responseData as $property => $value) {
             $setter = 'set' . ucfirst($property);
             if (ctype_digit($value)) {
@@ -57,12 +55,11 @@ abstract class AbstractResponse
                 break;
             case 'get':
                 if (!isset($this->data[$key])) {
-                    throw new \Exception(sprintf('data %s is not defined', $key));
+                    throw new \RuntimeException(sprintf('data %s is not defined', $key));
                 }
                 return $this->data[$key];
-            default:
-                throw new \Exception(sprintf('function %s is not defined', $function));
         }
+        throw new \RuntimeException(sprintf('function %s is not defined', $function));
     }
 
     /**
@@ -71,7 +68,7 @@ abstract class AbstractResponse
      * @param string $key
      * @param mixed $value
      */
-    public function setData($key, $value): void
+    public function setOwnData($key, $value): void
     {
         $this->ownData[$key] = $value;
     }
@@ -82,7 +79,7 @@ abstract class AbstractResponse
      * @param $key
      * @return mixed|null
      */
-    public function getData($key)
+    public function getOwnData($key)
     {
         return $this->ownData[$key] ?? null;
     }
