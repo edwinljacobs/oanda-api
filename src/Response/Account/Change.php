@@ -6,8 +6,9 @@
 
 namespace EdwinLJacobs\OandaApi\Response\Account;
 
+use EdwinLJacobs\OandaApi\Response\AbstractResponse;
 
-class Change
+class Change extends AbstractResponse
 {
 
 }

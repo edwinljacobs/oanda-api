@@ -6,8 +6,9 @@
 
 namespace EdwinLJacobs\OandaApi\Response\Account;
 
+use EdwinLJacobs\OandaApi\Response\AbstractResponse;
 
-class Instrument
+class Instrument extends AbstractResponse
 {
 
 }
