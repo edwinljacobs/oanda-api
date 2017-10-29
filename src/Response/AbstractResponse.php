@@ -6,6 +6,14 @@
 
 namespace EdwinLJacobs\OandaApi\Response;
 
+/**
+ * Class AbstractResponse
+ *
+ * All Response models will extend from this class.
+ * This class holds basic constructor logic and implements methods to track data set by the application.
+ *
+ * @package EdwinLJacobs\OandaApi\Response
+ */
 abstract class AbstractResponse
 {
     /**
@@ -14,7 +22,7 @@ abstract class AbstractResponse
     protected $data;
 
     /**
-     * @var array
+     * @var array Used to store data set by the application
      */
     protected $ownData = [];
 
@@ -22,7 +30,7 @@ abstract class AbstractResponse
      * AbstractResponse constructor.
      * @param array $responseData
      */
-    public function __construct($responseData)
+    public function __construct(array $responseData)
     {
         foreach ($responseData as $property => $value) {
             $setter = 'set' . ucfirst($property);
@@ -68,13 +76,13 @@ abstract class AbstractResponse
      * @param string $key
      * @param mixed $value
      */
-    public function setOwnData($key, $value): void
+    public function setOwnData(string $key, $value): void
     {
         $this->ownData[$key] = $value;
     }
 
     /**
-     * If return own data by key.
+     * Return own data by key.
      *
      * @param $key
      * @return mixed|null
